@@ -7,6 +7,9 @@
 #include <fstream>
 #include <string>
 
+#include "gotoxy.h"
+#include "rahmen.h"
+
 #define KEY_UP 72
 #define KEY_DOWN 80
 #define KEY_RIGHT 75
@@ -70,7 +73,7 @@ int enemy1_x = 0, enemy1_y = 0,
 // Player Coordinaten, Challenges etc
 int x_cord, // X Coordinate des Spielers
 	y_cord, // Y Coordinate des Spielers
-	beep_border = 350, // Int für Beep Ton bei Berühren der Wand
+	beep_border = 350, // Int fÃ¼r Beep Ton bei BerÃ¼hren der Wand
 	hitBomb = 0, // Punkte
 	challenge = 0, 
 	steps = 0, // Schritte
