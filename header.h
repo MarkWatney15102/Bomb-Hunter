@@ -5,46 +5,42 @@
 #include <ctime>
 #include <cstdio>
 #include <fstream>
-#include <string>
 
 #include "gotoxy.h"
 #include "rahmen.h"
-
-#define KEY_UP 72
-#define KEY_DOWN 80
-#define KEY_RIGHT 75
-#define KEY_LEFT 77
-#define KEY_KILL 120
-#define PLAYER 120
-
-// Challenges
-#define TIME_CHALLENGE_1 10
-#define TIME_CHALLENGE_2 30
-#define TIME_CHALLENGE_3 60
-#define STEP_CHALLENGE_1 50 
-#define STEP_CHALLENGE_2 100 
-#define STEP_CHALLENGE_3 200 
-
+#include "gameover.h"
+#include "updateGame.h"
+#include "setBombsPos.h"
 using namespace std;
 
-void clrscr();
-void gotoxy();
-void rahmen();
+// Controll Keys
+const int KEY_UP = 72;
+const int KEY_DOWN = 80;
+const int KEY_RIGHT = 75;
+const int KEY_LEFT = 77;
+const int KEY_KILL = 120;
+
+// Challenges
+const int TIME_CHALLENGE_1 = 10;
+const int TIME_CHALLENGE_2 = 30;
+const int TIME_CHALLENGE_3 = 60;
+const int STEP_CHALLENGE_1 = 50;
+const int STEP_CHALLENGE_2 = 100;
+const int STEP_CHALLENGE_3 = 200;
+
+// Sonstiges
+const int PLAYER = 120;
+
 void menu();
 void startGame();
 void move_player();
 void setBomsPosition();
-void updatePoints();
 void updatePlayTime();
-void menuRahmen();
-void updateSteps();
 void shop();
 void stats();
 void gameOver();
 void einstellungen();
 void hitEnemy();
-void updateHP();
-void onBombExecute() { setBomsPosition(); rahmen(); updatePoints(); updateSteps(); updateHP(); }
 void exitGame() { exit(0); }
 
 bool isOutOfField();
@@ -71,12 +67,12 @@ int enemy1_x = 0, enemy1_y = 0,
 	enemy2_x = 0, enemy2_y = 0; 
 
 // Player Coordinaten, Challenges etc
-int x_cord, // X Coordinate des Spielers
-	y_cord, // Y Coordinate des Spielers
-	beep_border = 350, // Int für Beep Ton bei Berühren der Wand
+int x_cord,
+	y_cord,
+	beep_border = 350,
 	hitBomb = 0, // Punkte
 	challenge = 0, 
-	steps = 0, // Schritte
+	steps = 0, 
 	steps_challenge = 0,
 	playerMoveBlocks = 1,
 	playerPointMultiplayer = 1,
@@ -88,3 +84,5 @@ int x_cord, // X Coordinate des Spielers
 bool run;
 
 HANDLE cmd = GetStdHandle(STD_OUTPUT_HANDLE);
+
+void onBombExecute() { setBomsPosition(); rahmen(); updatePoints(hitBomb); updateSteps(steps); updateHP(hp); }

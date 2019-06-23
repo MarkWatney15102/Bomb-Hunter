@@ -12,7 +12,7 @@ void rahmen()
 	gotoxy(80, 23);cout << char(188);
 }
 
-void menuRahmen()
+void menuRahmen(int allPoints)
 {
 	for(int i = 2; i < 80; i++) { gotoxy(i, 1); cout << char(205); gotoxy(i, 23); cout << char(205); gotoxy(i, 20); cout << char(205); gotoxy(i, 3); cout << char(205); } // Waagerechte Linien
 	for(int i = 2; i < 23; i++) { gotoxy(1, i); cout << char(186); gotoxy(80, i); cout << char(186); } // Senkrechte Linien
@@ -41,3 +41,4 @@ void menuRahmen()
 	
 	for(int i = 1; i <= 15; i++) { gotoxy(49, i + 3); cout << i << ". - Eike W. - " << allPoints << " Points"; }
 }
+

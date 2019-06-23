@@ -5,11 +5,5 @@
 #include <ctime>
 #include <cstdio>
 #include <fstream>
-#include <string>
-using namespace std;
-
 #include "gotoxy.h"
-
-void menuRahmen(int allPoints);
-void rahmen();
-
+using namespace std;

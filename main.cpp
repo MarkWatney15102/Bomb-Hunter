@@ -1,7 +1,7 @@
 /*
 	Title: Bomb Hunter
 	Author: Eike Wientjes
-	Version: v0.0.2
+	Version: v0.1.1
 	Description: Game by Eike
 */
 
@@ -31,7 +31,7 @@ void menu()
 	SetConsoleCursorInfo(cmd,&cu);
 	
 	clrscr();
-	menuRahmen();
+	menuRahmen(allPoints);
 	
 	int option = 0;
 	
@@ -67,6 +67,9 @@ void menu()
 	
 	gotoxy(3, 14);
 	cout << "[ ] Spiel beenden";
+	
+	gotoxy(3, 15);
+	cout << "[ ] About me";
 	
 	if(endtime != 0) {
 		gotoxy(3, 20);
@@ -108,6 +111,8 @@ void menu()
 						gotoxy(4, 13);
 					}else if(menuPoint == 11) {
 						gotoxy(4, 14);
+					}else if(menuPoint == 12) {
+						gotoxy(4, 15);	
 					}else {
 						menuPoint--;
 					}
@@ -169,6 +174,8 @@ void menu()
 									einstellungen();
 								}else if(menuPoint == 11) {
 									exitGame();
+								}else if(menuPoint == 12) {
+									// Über mich einbauen
 								}
 							break;
 					}
@@ -197,6 +204,8 @@ void menu()
 						gotoxy(4, 13);
 					}else if(menuPoint == 11) {
 						gotoxy(4, 14);
+					}else if(menuPoint == 12) {
+						gotoxy(4, 15);
 					}else {
 						menuPoint++;
 					}
@@ -258,6 +267,8 @@ void menu()
 									einstellungen();
 								}else if(menuPoint == 11) {
 									exitGame();
+								}else if(menuPoint == 12) {
+									// Über mich einbauen
 								}
 							break;
 					}
@@ -284,9 +295,9 @@ void startGame()
 	SetConsoleCursorInfo(cmd,&cu);
 	
 	setBomsPosition();
-	updatePoints();
-	updateSteps();
-	updateHP();
+	updatePoints(hitBomb);
+	updateSteps(steps);
+	updateHP(hp);
 	
 	while(1) {
 		move_player();
@@ -295,6 +306,9 @@ void startGame()
 
 int main(int argc, char** argv) 
 {
+	setBomsPosition();
+	getch();
+	
 	srand((unsigned)time(NULL));
 	SetConsoleTextAttribute(cmd, 2);
 	menu();
@@ -317,7 +331,7 @@ void move_player()
 						gotoxy(x_cord, y_cord); 
 						cout << char(PLAYER);
 						steps = steps + 1;
-						updateSteps();
+						updateSteps(steps);
 						if(onBomb()) {
 							onBombExecute();
 						}
@@ -336,7 +350,7 @@ void move_player()
 						gotoxy(x_cord, y_cord); 
 						cout << char(PLAYER);
 						steps = steps + 1;
-						updateSteps();
+						updateSteps(steps);
 						if(onBomb()) {
 							onBombExecute();
 						}
@@ -355,7 +369,7 @@ void move_player()
 						gotoxy(x_cord, y_cord); 
 						cout << char(PLAYER);
 						steps = steps + 1;
-						updateSteps();
+						updateSteps(steps);
 						if(onBomb()) {
 							onBombExecute();
 						}
@@ -374,7 +388,7 @@ void move_player()
 						gotoxy(x_cord, y_cord); 
 						cout << char(PLAYER); 
 						steps = steps + 1;
-						updateSteps();
+						updateSteps(steps);
 						if(onBomb()) {
 							onBombExecute();
 						}
@@ -388,7 +402,8 @@ void move_player()
 				// Quit Game (use "x" Key)
 					updatePlayTime();
 					run = false;
-					gameOver();
+					gameOver(hitBomb, steps, endtime, reason);
+					menu();
 				break;
 		}
 	}
@@ -443,23 +458,12 @@ void hitEnemy()
 		
 	if(hp > 1) {
 		hp--;
-		updateHP();
+		updateHP(hp);
 	}else {
 		reason = 1;
-		gameOver();
+		gameOver(hitBomb, steps, endtime, reason);
+		menu();
 	}
-}
-
-void updateHP()
-{
-	gotoxy(73, 1);
-	cout << "HP: " << hp;
-}
-
-void updatePoints()
-{
-	gotoxy(3, 1);
-	cout << "Points: " << hitBomb;
 }
 
 void setBomsPosition()
@@ -787,69 +791,18 @@ void updatePlayTime()
 	if(challenge != 1) {
 		if(duration >= challenge) {
 			run = false;
-			gameOver();
+			gameOver(hitBomb, steps, endtime, reason);
+			menu();
 		}	
 	}
 	if(steps_challenge != 0) {
 		if(steps >= steps_challenge) {
 			run = false;
-			gameOver();	
+			gameOver(hitBomb, steps, endtime, reason);	
+			menu();
 		}
 	}
 	
 	gotoxy(53, 23);
 	cout << "Lifetime: " << duration << " sekunden";
-}
-
-void gameOver()
-{
-	Sleep(500);
-	clrscr();
-	for(int i = 1; i <= 40; i++) { gotoxy(i + 20, 7); cout << char(205); gotoxy(i + 20, 15); cout << char(205); }	
-	for(int i = 1; i <= 7; i++) { gotoxy(21, i + 7); cout << char(186); gotoxy(60, i + 7); cout << char(186); }
-	
-	gotoxy(21, 7); cout << char(201);
-	gotoxy(60, 7); cout << char(187);
-	gotoxy(21, 15); cout << char(200);
-	gotoxy(60, 15); cout << char(188);
-	
-	gotoxy(36, 8);
-	cout << "Game Over";
-	
-	gotoxy(36, 10);
-	cout << "Punkte: " << hitBomb;
-	
-	gotoxy(35, 11);
-	cout << "Schritte: " << steps;
-	
-	gotoxy(30, 12);
-	cout << "Zeit: " << endtime << " Sekunden";
-	
-	if(reason == 1) {
-		gotoxy(23, 13);
-		cout << "Du hast einen Falschen Punkt ber" << char(129) << "hrt!";
-	}
-	
-	gotoxy(23, 14);
-	cout << "Es geht in 5 Sekunden zu Hauptmenu!";
-	
-	Sleep(5000);
-	menu();
-}
-
-void updateSteps()
-{
-	gotoxy(3, 23);
-	cout << "Schritte: " << steps;
-}
-
-void clrscr()
-{
-    HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
-    COORD coord = {0, 0};
-    DWORD count;
-   	CONSOLE_SCREEN_BUFFER_INFO csbi;
-   	GetConsoleScreenBufferInfo(hStdOut, &csbi); 
-    FillConsoleOutputCharacter(hStdOut, ' ', csbi.dwSize.X * csbi.dwSize.Y, coord, &count);
-    SetConsoleCursorPosition(hStdOut, coord);
 }
